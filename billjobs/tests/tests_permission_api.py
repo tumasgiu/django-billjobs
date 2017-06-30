@@ -12,7 +12,13 @@ class AnonymousPermissionAPITest(GenericAPITest):
         super().setUp()
         self.url = reverse('permissions-api')
         self.expected_status = {
-                'GET': 401
+                'GET': 401,
+                'POST': 401,
+                'PUT': 401,
+                'DELETE': 401,
+                'HEAD': 401,
+                'OPTIONS': 401,
+                'HEAD': 401,
                 }
 
     def tearDown(self):
