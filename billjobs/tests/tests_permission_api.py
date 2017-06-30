@@ -18,7 +18,16 @@ class AnonymousPermissionAPITest(GenericAPITest):
                 'DELETE': 401,
                 'HEAD': 401,
                 'OPTIONS': 401,
-                'HEAD': 401,
+                'PATCH': 401,
+                }
+        self.expected_content = {
+                'GET': self.error_message['401'],
+                'POST': self.error_message['401'],
+                'PUT': self.error_message['401'],
+                'DELETE': self.error_message['401'],
+                'HEAD': self.error_message['401'],
+                'OPTIONS': self.error_message['401'],
+                'PATCH': self.error_message['401'],
                 }
 
     def tearDown(self):
@@ -27,3 +36,5 @@ class AnonymousPermissionAPITest(GenericAPITest):
     def test_permission_api_status_code(self):
         self.status_code_is()
 
+    def test_permission_api_content(self):
+        self.content_is()
