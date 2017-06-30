@@ -32,6 +32,15 @@ class PermissionAPI(APIView):
         List permissions
         """
 
+class PermissionDetailAPI(APIView):
+    """
+    API endpoint to retrieve, update, delete permissions
+    """
+    def get(self, request, pk, format=None):
+        """
+        Retrieve permissions
+        """
+
 class GroupAPI(APIView):
     """
     API endpoint to list or create groups
