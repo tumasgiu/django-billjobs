@@ -75,3 +75,41 @@ class AnonymousPermissionDetailAPITest(GenericAPITest):
 
     def test_permission_detail_api_content(self):
         self.content_is()
+
+class UserPermissionAPITest(GenericAPITest):
+    """
+    Test /permissions endpoint status code and response data for authenticated
+    user
+    """
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('permissions-api')
+        self.force_authenticate(user=self.bill)
+        self.expected_status = {
+                'GET': 403,
+                'POST': 403,
+                'PUT': 403,
+                'DELETE': 403,
+                'HEAD': 403,
+                'OPTIONS': 403,
+                'PATCH': 403,
+                }
+        self.expected_content = {
+                'GET': self.error_message['403'],
+                'POST': self.error_message['403'],
+                'PUT': self.error_message['403'],
+                'DELETE': self.error_message['403'],
+                'HEAD': self.error_message['403'],
+                'OPTIONS': self.error_message['403'],
+                'PATCH': self.error_message['403'],
+                }
+
+    def tearDown(self):
+        super().tearDown()
+
+    def test_permission_api_status_code(self):
+        self.status_code_is()
+
+    def test_permission_api_content(self):
+        self.content_is()
