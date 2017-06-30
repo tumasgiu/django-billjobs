@@ -12,6 +12,8 @@ api_patterns = [
         url(r'^groups/$', views.GroupAPI.as_view(), name='groups-api'),
         url(r'^groups/(?P<pk>[0-9]+)/$', views.GroupDetailAPI.as_view(),
             name='groups-detail-api'),
+        url(r'^permissions/$', views.PermissionAPI.as_view(),
+            name='permissions-api'),
         ]
 
 urlpatterns = [
