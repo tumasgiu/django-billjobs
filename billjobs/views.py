@@ -23,6 +23,15 @@ from .permissions import CustomUserAPIPermission, \
         CustomGroupDetailAPIPermission
 from textwrap import wrap
 
+class PermissionAPI(APIView):
+    """
+    API endpoint to list or create permissions
+    """
+    def get(self, request, format=None):
+        """
+        List permissions
+        """
+
 class GroupAPI(APIView):
     """
     API endpoint to list or create groups
