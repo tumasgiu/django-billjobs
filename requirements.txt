@@ -16,6 +16,8 @@ django-debug-toolbar==1.7
 django==1.11
 djangorestframework==3.6.2
 docutils==0.13.1          # via sphinx
+factory-boy==2.8.1
+faker==0.7.17             # via factory-boy
 first==2.0.1              # via pip-tools
 imagesize==0.7.1          # via sphinx
 jinja2==2.9.5             # via sphinx
@@ -30,6 +32,7 @@ pkginfo==1.4.1            # via twine
 port_for==0.3.1           # via sphinx-autobuild
 pygments==2.2.0           # via sphinx
 pyparsing==2.1.10         # via packaging
+python-dateutil==2.6.0    # via faker
 pytz==2016.10             # via babel, django
 pyyaml==3.12
 reportlab==3.4.0
