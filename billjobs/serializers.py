@@ -5,9 +5,11 @@ class PermissionSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer class for django.contrib.auth.models.Permission
     """
+    content_type = serializers.StringRelatedField()
+
     class Meta:
         model = Permission
-        exclude = ['content_type',]
+        fields = '__all__'
         extra_kwargs = {
                 'url': {'view_name': 'permissions-detail-api'}
                 }
