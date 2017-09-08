@@ -151,3 +151,54 @@ class UserPermissionDetailAPITest(GenericAPITest):
 
     def test_permission_detail_api_content(self):
         self.content_is()
+
+class AdminPermissionAPITest(GenericAPITest):
+    """
+    Test /permissions endpoint status code and response data for authenticated
+    admin
+    """
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('permissions-api')
+        self.force_authenticate(user=self.admin)
+        self.expected_status = {
+                'GET': 200,
+#                'POST': 200,
+#                'PUT': 200,
+#                'DELETE': 204,
+#                'HEAD': 200,
+#                'OPTIONS': 200,
+#                'PATCH': 200,
+                }
+        self.expected_content = {
+                'GET': [
+                    collections.OrderedDict({
+                        "url": "http://testserver/billjobs/api/1.0/permissions/1/",
+                        "name": "Can add log entry",
+                        "codename": "add_logentry"
+                    }),
+                    collections.OrderedDict({
+                        "url": "http://testserver/billjobs/api/1.0/permissions/18/",
+                        "name": "Can delete session",
+                        "codename": "delete_session"
+                        }),
+                    ],
+#                'POST': self.error_message['403'],
+#                'PUT': self.error_message['403'],
+#                'DELETE': self.error_message['403'],
+#                'HEAD': self.error_message['403'],
+#                'OPTIONS': self.error_message['403'],
+#                'PATCH': self.error_message['403'],
+                }
+
+    def tearDown(self):
+        super().tearDown()
+
+    def test_permission_api_status_code(self):
+        self.status_code_is()
+
+    def test_permission_api_content(self):
+        self.content_is()
+
+
