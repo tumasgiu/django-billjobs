@@ -1,6 +1,16 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from rest_framework import serializers
 
+class PermissionSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Serializer class for django.contrib.auth.models.Permission
+    """
+    class Meta:
+        model = Permission
+        exclude = ['content_type',]
+        extra_kwargs = {
+                'url': {'view_name': 'permissions-detail-api'}
+                }
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
