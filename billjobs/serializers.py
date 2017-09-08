@@ -21,6 +21,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             read_only=True,
             view_name='groups-detail-api'
             )
+    user_permissions = serializers.HyperlinkedRelatedField(
+            many=True,
+            read_only=True,
+            view_name='permissions-detail-api'
+            )
 
     class Meta:
         model = User
