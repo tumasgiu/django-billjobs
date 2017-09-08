@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -17,7 +17,8 @@ from .settings import BILLJOBS_DEBUG_PDF, BILLJOBS_BILL_LOGO_PATH, \
         BILLJOBS_BILL_LOGO_WIDTH, BILLJOBS_BILL_LOGO_HEIGHT, \
         BILLJOBS_BILL_PAYMENT_INFO
 from .models import Bill
-from billjobs.serializers import UserSerializer, GroupSerializer
+from billjobs.serializers import UserSerializer, GroupSerializer, \
+        PermissionSerializer
 from .permissions import CustomUserAPIPermission, \
         CustomUserDetailAPIPermission, CustomGroupAPIPermission, \
         CustomGroupDetailAPIPermission
@@ -31,6 +32,10 @@ class PermissionAPI(APIView):
         """
         List permissions
         """
+        permissions = Permission.objects.all()
+        serializer = PermissionSerializer(permissions, context={'request': request},
+                    many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class PermissionDetailAPI(APIView):
     """
@@ -40,6 +45,7 @@ class PermissionDetailAPI(APIView):
         """
         Retrieve permissions
         """
+
 
 class GroupAPI(APIView):
     """
