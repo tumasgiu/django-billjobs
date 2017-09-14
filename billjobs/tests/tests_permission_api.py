@@ -168,7 +168,7 @@ class AdminPermissionAPITest(GenericAPITest):
                 # type object
 #                'POST': 200,
                 'PUT': 405,
-#                'DELETE': 204,
+                'DELETE': 405,
 #                'HEAD': 200,
 #                'OPTIONS': 200,
 #                'PATCH': 200,
@@ -188,7 +188,7 @@ class AdminPermissionAPITest(GenericAPITest):
                     ],
 #                'POST': self.error_message['403'],
                 'PUT': self.error_message['405_PUT'],
-#                'DELETE': self.error_message['403'],
+                'DELETE': self.error_message['405_DELETE'],
 #                'HEAD': self.error_message['403'],
 #                'OPTIONS': self.error_message['403'],
 #                'PATCH': self.error_message['403'],
