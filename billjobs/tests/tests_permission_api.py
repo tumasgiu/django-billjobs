@@ -216,7 +216,7 @@ class AdminPermissionDetailAPITest(GenericAPITest):
         self.force_authenticate(user=self.admin)
         self.expected_status = {
                 'GET': 200,
-#                'POST': 405,
+                'POST': 405,
 #                'PUT': 200,
 #                'DELETE': 204,
 #                'HEAD': 200,
@@ -229,7 +229,7 @@ class AdminPermissionDetailAPITest(GenericAPITest):
                     "name": "Can add log entry",
                     "codename": "add_logentry"
                     },
-#                'POST': self.error_message['403'],
+                'POST': self.error_message['405_POST'],
 #                'PUT': self.error_message['405_PUT'],
 #                'DELETE': self.error_message['405_DELETE'],
                 # Do not test message
