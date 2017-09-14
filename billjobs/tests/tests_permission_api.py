@@ -204,4 +204,47 @@ class AdminPermissionAPITest(GenericAPITest):
     def test_permission_api_content(self):
         self.content_is()
 
+class AdminPermissionDetailAPITest(GenericAPITest):
+    """
+    Test /permissions/pk endpoint status code and response data for
+    authenticated admin
+    """
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('permissions-detail-api', args=(1,))
+        self.force_authenticate(user=self.admin)
+        self.expected_status = {
+                'GET': 200,
+#                'POST': 405,
+#                'PUT': 200,
+#                'DELETE': 204,
+#                'HEAD': 200,
+#                'OPTIONS': 200,
+#                'PATCH': 405,
+                }
+        self.expected_content = {
+                'GET': {
+                    "url": "http://testserver/billjobs/api/1.0/permissions/1/",
+                    "name": "Can add log entry",
+                    "codename": "add_logentry"
+                    },
+#                'POST': self.error_message['403'],
+#                'PUT': self.error_message['405_PUT'],
+#                'DELETE': self.error_message['405_DELETE'],
+                # Do not test message
+#                'HEAD': self.error_message['403'],
+#                'OPTIONS': self.error_message['403'],
+#                'PATCH': self.error_message['405_PATCH'],
+                }
+
+    def tearDown(self):
+        super().tearDown()
+
+    def test_permission_api_status_code(self):
+        self.status_code_is()
+
+    def test_permission_api_content(self):
+        self.content_is()
+
 
