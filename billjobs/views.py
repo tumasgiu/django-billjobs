@@ -52,11 +52,19 @@ class PermissionDetailAPI(APIView):
     """
     API endpoint to retrieve, update, delete permissions
     """
-    def get(self, request, pk, format=None):
-        """
-        Retrieve permissions
-        """
+    def get_object(self, pk):
+        try:
+            permission = Permission.objects.get(pk=pk)
+            self.check_object_permissions(self.request, permission)
+            return permission
+        except Permission.DoesNotExist:
+            raise Http404
 
+    def get(self, request, pk, format=None):
+        permission = self.get_object(pk)
+        serializer = PermissionSerializer(
+                permission, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GroupAPI(APIView):
     """
