@@ -164,8 +164,10 @@ class AdminPermissionAPITest(GenericAPITest):
         self.force_authenticate(user=self.admin)
         self.expected_status = {
                 'GET': 200,
+                # POST is not tested because of an error with Django content
+                # type object
 #                'POST': 200,
-#                'PUT': 200,
+                'PUT': 405,
 #                'DELETE': 204,
 #                'HEAD': 200,
 #                'OPTIONS': 200,
@@ -185,7 +187,7 @@ class AdminPermissionAPITest(GenericAPITest):
                         }),
                     ],
 #                'POST': self.error_message['403'],
-#                'PUT': self.error_message['403'],
+                'PUT': self.error_message['405_PUT'],
 #                'DELETE': self.error_message['403'],
 #                'HEAD': self.error_message['403'],
 #                'OPTIONS': self.error_message['403'],
