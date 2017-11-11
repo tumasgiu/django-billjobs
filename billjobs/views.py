@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import urllib
+from django import forms
 from django.forms import ModelForm, ValidationError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -24,6 +25,7 @@ from urllib.request import urlopen
 
 class UserSignupForm(ModelForm):
     ''' Form for signup '''
+
     class Meta:
         model = User
         fields = ['username', 'password', 'first_name', 'last_name', 'email']
@@ -48,7 +50,6 @@ class UserSignupForm(ModelForm):
 
 
 class UserProfileForm(ModelForm):
-
     class Meta:
         model = UserProfile
         fields = ['billing_address']
@@ -57,6 +58,26 @@ class UserProfileForm(ModelForm):
         data = self.cleaned_data['billing_address']
         if data == "":
             raise ValidationError(_('This field is required.'))
+        return data
+
+
+class UserLoginForm(forms.Form):
+    ''' Form for login (regular user) '''
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_username(self):
+        data = self.cleaned_data['username']
+        if data == "":
+            raise ValidationError(_("This field is required."))
+        if not User.objects.filter(username__exact=data).exists():
+            raise ValidationError(_("This user does not exists"))
+        return data
+
+    def clean_password(self):
+        data = self.cleaned_data['password']
+        if data == "":
+            raise ValidationError(_("This field is required."))
         return data
 
 
