@@ -123,6 +123,7 @@ def logout(request):
     return redirect('login')
 
 
+@login_required
 def onboarding(request):
     ''' Signup view for new user '''
     if request.method == 'POST':
