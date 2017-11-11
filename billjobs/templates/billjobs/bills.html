@@ -1,0 +1,15 @@
+{% extends "billjobs/base.html" %}
+{% block body %}
+<div class="container">
+    <a class="button is-primary is-pulled-right" href="{% url 'create_bill' %}">Créer une facture</a>
+    {% if not bills %}
+        Vous n'avez aucune facture
+    {% else %}
+        <ul>
+        {% for bill in bills %}
+            <li>{{ bill.number }} - {{ bill.amount }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endblock body %}

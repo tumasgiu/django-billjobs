@@ -1,0 +1,21 @@
+{% extends "billjobs/base.html" %}
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="home-buttons">
+            <a class="home-button" href="{% url "profile" %}">
+                <i class="fa fa-3x fa-user-circle"></i>
+                <span>Mon Profil</span>
+            </a>
+            <a class="home-button" href="{% url "bills" %}">
+                <i class="fa fa-3x fa-file-text"></i>
+                <span>Mes Factures</span>
+            </a>
+            <a class="home-button" href="{% url "onboarding" %}">
+                <i class="fa fa-3x fa-id-badge"></i>
+                <span>Accueillir un nouveau coworker</span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock body %}

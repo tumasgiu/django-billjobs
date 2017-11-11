@@ -93,6 +93,32 @@ def force_user_properties(user):
     user.save()
 
 
+@login_required
+def home(request):
+    return render(request, 'billjobs/home.html')
+
+
+@login_required
+def profile(request):
+    return render(request, 'billjobs/profile.html')
+
+
+@login_required
+def create_bill(request):
+    return render(request, 'billjobs/create_bill.html')
+
+
+@login_required
+def bills(request):
+    user_bills = Bill.objects.filter(user=request.user)
+    return render(request, 'billjobs/bills.html', {'bills': user_bills})
+
+
+@login_required
+def directory(request):
+    return render(request, 'billjobs/directory.html')
+
+
 def login(request):
     ''' Login view for regular users '''
     if request.method == 'POST':
