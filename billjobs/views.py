@@ -116,6 +116,13 @@ def login(request):
     )
 
 
+@login_required
+def logout(request):
+    from django.contrib.auth import logout
+    logout(request)
+    return redirect('login')
+
+
 def onboarding(request):
     ''' Signup view for new user '''
     if request.method == 'POST':
