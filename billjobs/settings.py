@@ -19,7 +19,8 @@ BILLJOBS_DEFAULT = dict(
             You can use htlm in this setting.
             """,
         FORCE_SUPERUSER=False,
-        FORCE_USER_GROUP=None
+        FORCE_USER_GROUP=None,
+        BILLJOBS_SLACK_TOKEN=None
         )
 
 
@@ -58,4 +59,10 @@ BILLJOBS_FORCE_USER_GROUP = getattr(
         settings,
         'BILLJOBS_FORCE_USER_GROUP',
         BILLJOBS_DEFAULT['FORCE_USER_GROUP']
+        )
+
+BILLJOBS_SLACK_TOKEN = getattr(
+        settings,
+        'BILLJOBS_SLACK_TOKEN',
+        BILLJOBS_DEFAULT['BILLJOBS_SLACK_TOKEN']
         )
