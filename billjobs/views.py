@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import urllib
+from django.contrib.auth import authenticate
 from django import forms
 from django.forms import ModelForm, ValidationError
 from django.http import HttpResponse
@@ -90,6 +91,29 @@ def force_user_properties(user):
         group = Group.objects.get(name=BILLJOBS_FORCE_USER_GROUP)
         user.groups.add(group.id)
     user.save()
+
+
+def login(request):
+    ''' Login view for regular users '''
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(request, username=form.cleaned_data['username'],
+                                password=form.cleaned_data['password'])
+            if user is not None:
+                from django.contrib.auth import login
+                login(request, user)
+                return redirect(request.GET.get('next', 'home'))
+            else:
+                form.add_error('password', 'Wrong password')
+    else:
+        form = UserLoginForm()
+    return render(
+        request,
+        'billjobs/login.html',
+        {'user_form': form}
+    )
 
 
 def onboarding(request):
