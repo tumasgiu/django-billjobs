@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import urllib
 from django.forms import ModelForm, ValidationError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -13,11 +14,12 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, Paragraph
 from io import BytesIO
 from .settings import BILLJOBS_DEBUG_PDF, BILLJOBS_BILL_LOGO_PATH, \
-        BILLJOBS_BILL_LOGO_WIDTH, BILLJOBS_BILL_LOGO_HEIGHT, \
-        BILLJOBS_BILL_PAYMENT_INFO, BILLJOBS_FORCE_SUPERUSER, \
-        BILLJOBS_FORCE_USER_GROUP
+    BILLJOBS_BILL_LOGO_WIDTH, BILLJOBS_BILL_LOGO_HEIGHT, \
+    BILLJOBS_BILL_PAYMENT_INFO, BILLJOBS_FORCE_SUPERUSER, \
+    BILLJOBS_FORCE_USER_GROUP, BILLJOBS_SLACK_TOKEN
 from .models import Bill, UserProfile
 from textwrap import wrap
+from urllib.request import urlopen
 
 
 class UserSignupForm(ModelForm):
@@ -81,6 +83,8 @@ def onboarding(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            send_slack_invite(user_form)
+            # TODO: check response ?
             return redirect('billjobs_signup_success')
     else:
         user_form = UserSignupForm()
@@ -90,6 +94,16 @@ def onboarding(request):
         'billjobs/onboarding.html',
         {'user_form': user_form, 'profile_form': profile_form}
     )
+
+
+def send_slack_invite(user_form):
+    # generate your token here (this has been tested with a user token) :
+    # https://api.slack.com/custom-integrations/legacy-tokens
+    if BILLJOBS_SLACK_TOKEN is not None:
+        q = dict(token=BILLJOBS_SLACK_TOKEN, email=user_form.cleaned_data['email'],
+                 first_name=user_form.cleaned_data['first_name'], last_name=user_form.cleaned_data['last_name'])
+        data = urllib.parse.urlencode(q).encode("utf-8")
+        urllib.request.urlopen('https://slack.com/api/users.admin.invite', data)
 
 
 def signup_success(request):
