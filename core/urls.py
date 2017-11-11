@@ -4,7 +4,7 @@ from core import settings
 admin.site.site_header = 'Coworking space administration'
 
 urlpatterns = [
-    url(r'^billjobs/', include('billjobs.urls')),
+    url(r'^', include('billjobs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]
 
