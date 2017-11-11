@@ -69,7 +69,7 @@ def force_user_properties(user):
     user.save()
 
 
-def signup(request):
+def onboarding(request):
     ''' Signup view for new user '''
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -86,10 +86,10 @@ def signup(request):
         user_form = UserSignupForm()
         profile_form = UserProfileForm()
     return render(
-            request,
-            'billjobs/signup.html',
-            {'user_form': user_form, 'profile_form': profile_form}
-            )
+        request,
+        'billjobs/onboarding.html',
+        {'user_form': user_form, 'profile_form': profile_form}
+    )
 
 
 def signup_success(request):
