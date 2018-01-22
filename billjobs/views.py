@@ -110,7 +110,7 @@ def create_bill(request):
 
 @login_required
 def bills(request):
-    user_bills = Bill.objects.filter(user=request.user)
+    user_bills = Bill.objects.filter(user=request.user).order_by('-billing_date')
     return render(request, 'billjobs/bills.html', {'bills': user_bills})
 
 

@@ -1,15 +1,38 @@
 {% extends "billjobs/base.html" %}
 {% block body %}
-<div class="container">
-    <a class="button is-primary is-pulled-right" href="{% url 'create_bill' %}">Créer une facture</a>
-    {% if not bills %}
-        Vous n'avez aucune facture
-    {% else %}
-        <ul>
-        {% for bill in bills %}
-            <li>{{ bill.number }} - {{ bill.amount }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-</div>
+    <section class="section">
+        <div class="container">
+            <a class="button is-primary is-pulled-right" href="{% url 'create_bill' %}">Créer une facture</a>
+            {% if not bills %}
+                <div class="message is-info">
+                    Vous n'avez aucune facture
+                </div>
+            {% else %}
+                <table class="table is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Facture</th>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Telecharger</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for bill in bills %}
+                        <tr>
+                            <td>{{ bill.number }}</td>
+                            <td>{{ bill.billing_date }}</td>
+                            <td>{{ bill.amount }}</td>
+                            <td>
+                                <a target="_blank" href="{% url 'generate-pdf' bill.id %}">
+                                    <i class="fa fa-file"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </section>
 {% endblock body %}
