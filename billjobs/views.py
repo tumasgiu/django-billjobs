@@ -194,7 +194,7 @@ def generate_pdf(request, bill_id):
     bill = Bill.objects.get(id=bill_id)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = '{} "{}"'.format(
-            'attachment; filename=', bill.number)
+        'attachment; filename=', '%s.pdf' % bill.number)
 
     # Create a buffer
     buffer = BytesIO()
