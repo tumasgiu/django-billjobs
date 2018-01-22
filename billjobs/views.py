@@ -19,7 +19,7 @@ from .settings import BILLJOBS_DEBUG_PDF, BILLJOBS_BILL_LOGO_PATH, \
     BILLJOBS_BILL_LOGO_WIDTH, BILLJOBS_BILL_LOGO_HEIGHT, \
     BILLJOBS_BILL_PAYMENT_INFO, BILLJOBS_FORCE_SUPERUSER, \
     BILLJOBS_FORCE_USER_GROUP, BILLJOBS_SLACK_TOKEN
-from .models import Bill, UserProfile
+from .models import Bill, UserProfile, Service, BillLine
 from textwrap import wrap
 from urllib.request import urlopen
 
@@ -82,6 +82,14 @@ class UserLoginForm(forms.Form):
         return data
 
 
+class BillLineForm(forms.Form):
+    service = forms.ModelChoiceField(queryset=Service.objects.filter(is_available=True), empty_label=None)
+    note = forms.CharField()
+
+
+BillLineFormSet = forms.formset_factory(BillLineForm)
+
+
 def force_user_properties(user):
     ''' Force user properties to be set when we register them '''
     user.is_staff = True
@@ -105,7 +113,30 @@ def profile(request):
 
 @login_required
 def create_bill(request):
-    return render(request, 'billjobs/create_bill.html')
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        formset = BillLineFormSet(request.POST)
+        if formset.is_valid():
+            bill = Bill(user=request.user)
+            bill.save()
+            lines = [*map(lambda data: BillLine(bill=bill, service=data['service'], quantity=1, note=data['note']),
+                          formset.cleaned_data)]
+            for line in lines:
+                line.save()
+            return redirect('bills')
+        else:
+            return render(
+                request,
+                'billjobs/create_bill.html',
+                {'formset': formset}
+            )
+    else:
+        formset = BillLineFormSet()
+    return render(
+        request,
+        'billjobs/create_bill.html',
+        {'formset': formset}
+    )
 
 
 @login_required

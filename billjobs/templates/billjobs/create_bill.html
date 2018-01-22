@@ -1,4 +1,90 @@
 {% extends "billjobs/base.html" %}
 {% block body %}
-    Creer une facture
+    <style>
+        #lineFormTemplate {
+            display: none;
+        }
+    </style>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Creer une facture</h1>
+            <form action="{% url 'create_bill' %}" method="post">
+                {{ formset.management_form }}
+                {% csrf_token %}
+                <div class="lines">
+                    {% for form in formset %}
+                        {% include 'billjobs/partials/bill_line.html' with form=form %}
+                    {% endfor %}
+
+                    <a id="addLine" href="javascript:void(0)" class="button is-primary">Ajouter une ligne</a>
+                </div>
+
+                <div id="lineFormTemplate">
+                    {% include 'billjobs/partials/bill_line.html' with form=formset.empty_form %}
+                </div>
+                <button type="submit" class="button is-success">Valider</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        var totalFormsField = document.getElementById('id_form-TOTAL_FORMS');
+        var formsCount = totalFormsField.value;
+
+        var lineFormTemplate = document.getElementById('lineFormTemplate').firstElementChild;
+        var linesContainer = document.querySelector('.lines');
+
+        var addLineButton = document.querySelector('#addLine');
+
+        function recomputePrefixes() {
+            var reg = /((id_)*form-)([0-9]+)/g;
+            var lines = linesContainer.querySelectorAll('.line');
+
+            for (var i = 0; i < lines.length; ++i) {
+                var line = lines[i];
+                line.dataset.line = i + '';
+
+                var formElements = line.querySelectorAll('[id][name]');
+
+                for (var j = 0; j < formElements.length; ++j) {
+                    var formElement = formElements[j];
+                    formElement.id = formElement.id.replace(reg, '$1' + i);
+                    formElement.name = formElement.name.replace(reg, '$1' + i);
+                }
+            }
+        }
+
+        function deleteLine(ev) {
+            var line = ev.target.closest('.line');
+            line.remove();
+            formsCount--;
+            recomputePrefixes();
+        }
+
+        function addLineForm() {
+            var clone = lineFormTemplate.cloneNode(true);
+            clone.dataset.line = formsCount;
+            var serviceSelect = clone.querySelector('#id_form-__prefix__-service');
+            serviceSelect.id = serviceSelect.id.replace('__prefix__', formsCount);
+            serviceSelect.name = serviceSelect.name.replace('__prefix__', formsCount);
+            var noteInput = clone.querySelector('#id_form-__prefix__-note');
+            noteInput.id = noteInput.id.replace('__prefix__', formsCount);
+            noteInput.name = noteInput.name.replace('__prefix__', formsCount);
+            var deleteButton = clone.querySelector('.delete-line.button');
+            deleteButton.addEventListener('click', deleteLine);
+            linesContainer.insertBefore(clone, addLineButton);
+            formsCount++;
+            totalFormsField.value = formsCount;
+        }
+
+        addLineButton.addEventListener('click', function () {
+            addLineForm();
+        });
+
+        // Attach delete listener to existing forms
+        deleteButtons = linesContainer.querySelectorAll('.delete-line.button');
+        for (var i = 0; i < deleteButtons.length; ++i) {
+            deleteButtons[i].addEventListener('click', deleteLine)
+        }
+    </script>
 {% endblock body %}

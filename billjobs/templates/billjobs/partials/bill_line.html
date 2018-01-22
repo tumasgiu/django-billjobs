@@ -1,0 +1,27 @@
+<div class="line box" data-line="{{ forloop.counter0 }}">
+    <div class="field is-grouped">
+        <div class="control">
+            <div class="select">
+                {{ form.service }}
+            </div>
+            <div class="help is-danger">{{ form.service.errors }}</div>
+        </div>
+        <div class="control is-expanded">
+            {% if form.note.errors %}
+                <input class="input is-danger" type="text" placeholder="Aidez les comptables bénévoles !" id="{{ form.note.id_for_label }}"
+                   name="{{ form.note.html_name }}"
+                   value="{{ form.note.value|default_if_none:'' }}">
+                <div class="help is-danger">{{ form.note.errors }}</div>
+            {% else %}
+                <input class="input" type="text" placeholder="Aidez les comptables bénévoles !" id="{{ form.note.id_for_label }}"
+                   name="{{ form.note.html_name }}"
+                   value="{{ form.note.value|default_if_none:'' }}">
+            {% endif %}
+        </div>
+        <div class="control">
+            <a href="javascript:void(0)" class="button is-danger delete-line">
+                <i class="fa fa-trash"></i>
+            </a>
+        </div>
+    </div>
+</div>
